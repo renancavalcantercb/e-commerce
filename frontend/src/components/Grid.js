@@ -1,25 +1,57 @@
 import React, { useState } from 'react';
 import { generateItems } from '../utils/utils';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const itemsPerPage = 8;
 const itemsPerPageMobile = 4;
 
 const items = generateItems(20);
 
+const localStorage = window.localStorage;
+
+const handleAddToCart = (item) => {
+    const cartItem = {
+        id: item.id,
+        title: item.title,
+        price: item.discount ? item.discount.toFixed(2) : item.price.toFixed(2),
+    };
+    const existingItems = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItemIndex = existingItems.findIndex((item) => item.id === cartItem.id);
+
+    if (existingItemIndex !== -1) {
+        existingItems.splice(existingItemIndex, 1);
+
+        const alertMessage = `O item "${cartItem.title}" já está no carrinho e foi removido.`;
+        toast.warn(alertMessage);
+    } else {
+        existingItems.push(cartItem);
+
+        const alertMessage = `O item "${cartItem.title}" foi adicionado ao carrinho.`;
+        toast.success(alertMessage);
+    }
+    localStorage.setItem("cart", JSON.stringify(existingItems));
+};
+
+
 function Grid() {
+    const location = useLocation();
+
+    const filteredItems = location.pathname === '/sales' ? items.filter((item) => item.sale) : items.filter((item) => !item.discount);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const indexOfLastItem = currentPage * (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
+    const indexOfLastItem =
+        currentPage * (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
     const indexOfFirstItem = indexOfLastItem - (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
-    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
-    const totalPages = Math.ceil(items.length / (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage));
+    const totalPages = Math.ceil(filteredItems.length / (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage));
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
         window.scrollTo({
             top: 0,
-            behavior: "smooth"
+            behavior: 'smooth',
         });
     };
 
@@ -33,8 +65,19 @@ function Grid() {
                             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                             <p className="text-gray-600 mb-4">{item.description}</p>
                             <div className="flex justify-between items-center">
-                                <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                {item.discount ? (
+                                    <div className="flex items-center">
+                                        <span className="text-lg font-bold mr-2">${item.discount.toFixed(2)}</span>
+                                        <span className="text-gray-400 line-through">${item.price.toFixed(2)}</span>
+                                    </div>
+                                ) : (
+                                    <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
+                                )}
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={() => handleAddToCart(item)
+                                    }
+                                >
                                     Add to cart
                                 </button>
                             </div>
