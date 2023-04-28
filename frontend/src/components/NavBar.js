@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const navLinks = [
     { id: 1, label: "Home", path: "/" },
-    { id: 2, label: "Ofertas do dia", path: "/produtos" },
+    { id: 2, label: "Ofertas do dia", path: "/sales" },
 ];
 
 function Navbar() {
@@ -61,10 +61,10 @@ function Navbar() {
                                 <FaSearch className="text-gray-400" />
                             </div>
                         </div>
-                        <div className="ml-4 top-1 left-0 py-1">
+                        <div className="ml-4 top-1 left-0 py-1 hover:bg-gray-700 rounded-full cursor-pointer">
                             <Link
-                                to="/carrinho"
-                                className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-800 hover:bg-white mt-4 lg:mt-0"
+                                to="/cart"
+                                className="inline-block text-sm px-4 py-2"
                             >
                                 <FaShoppingCart className="text-gray-400" />
                             </Link>
