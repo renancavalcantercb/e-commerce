@@ -7,6 +7,8 @@ const navLinks = [
     { id: 2, label: "Ofertas do dia", path: "/sales" },
 ];
 
+const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -61,14 +63,13 @@ function Navbar() {
                                 <FaSearch className="text-gray-400" />
                             </div>
                         </div>
-                        <div className="ml-4 top-1 left-0 py-1 hover:bg-gray-700 rounded-full cursor-pointer">
-                            <Link
-                                to="/cart"
-                                className="inline-block text-sm px-4 py-2"
-                            >
-                                <FaShoppingCart className="text-gray-400" />
+                        <div class="flex items-center ml-4">
+                            <Link to="/cart" class="relative inline-block">
+                                <FaShoppingCart className="text-gray-200" />
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartItems.length}</span>
                             </Link>
                         </div>
+
                     </div>
                 </div>
             </nav>
