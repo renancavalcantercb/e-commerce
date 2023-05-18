@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import { generateItems } from '../utils/utils';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const itemsPerPage = 8;
 const itemsPerPageMobile = 4;
 
-const items = generateItems(20);
-
 const localStorage = window.localStorage;
 
 const handleAddToCart = (item) => {
     const cartItem = {
-        id: item.id,
+        id: item._id.$oid,
         title: item.title,
-        price: item.discount ? item.discount.toFixed(2) : item.price.toFixed(2),
+        price: item.on_sale ? item.sale_price.toFixed(2) : item.price.toFixed(2),
     };
+    console.log(cartItem)
     const existingItems = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItemIndex = existingItems.findIndex((item) => item.id === cartItem.id);
 
@@ -33,19 +31,31 @@ const handleAddToCart = (item) => {
     localStorage.setItem("cart", JSON.stringify(existingItems));
 };
 
-
 function Grid() {
     const location = useLocation();
 
-    const filteredItems = location.pathname === '/sales' ? items.filter((item) => item.sale) : items.filter((item) => !item.discount);
+    const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const indexOfLastItem =
-        currentPage * (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
-    const indexOfFirstItem = indexOfLastItem - (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
-    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+    useEffect(() => {
+        if (location.pathname === '/sales') {
+            setCurrentPage(1);
+        }
+    }, [location.pathname]);
 
-    const totalPages = Math.ceil(filteredItems.length / (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage));
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/products?page=${currentPage}`);
+                const data = await response.json();
+                setItems(data);
+            } catch (error) {
+                console.error('Erro ao buscar os produtos:', error);
+            }
+        };
+
+        fetchItems();
+    }, [currentPage]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -55,19 +65,27 @@ function Grid() {
         });
     };
 
+    const filteredItems = location.pathname === '/sales' ? items.filter((item) => item.on_sale) : items;
+    const indexOfLastItem =
+        currentPage * (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
+    const indexOfFirstItem = indexOfLastItem - (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage);
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(filteredItems.length / (window.innerWidth < 640 ? itemsPerPageMobile : itemsPerPage));
+
     return (
         <div className="container mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4">
                 {currentItems.map((item) => (
-                    <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div key={item._id.$oid} className="bg-white rounded-lg shadow-lg overflow-hidden">
                         <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
                         <div className="p-4">
                             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                             <p className="text-gray-600 mb-4">{item.description}</p>
                             <div className="flex justify-between items-center">
-                                {item.discount ? (
+                                {item.on_sale ? (
                                     <div className="flex items-center">
-                                        <span className="text-lg font-bold mr-2">${item.discount.toFixed(2)}</span>
+                                        <span className="text-lg font-bold mr-2">${item.sale_price.toFixed(2)}</span>
                                         <span className="text-gray-400 line-through">${item.price.toFixed(2)}</span>
                                     </div>
                                 ) : (
@@ -75,8 +93,7 @@ function Grid() {
                                 )}
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onClick={() => handleAddToCart(item)
-                                    }
+                                    onClick={() => handleAddToCart(item)}
                                 >
                                     Add to cart
                                 </button>
