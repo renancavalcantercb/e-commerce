@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Grid from './components/Grid';
+import Cart from './components/Cart';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Grid />} />
         <Route path="/sales" element={<Grid />} />
-        <Route path="/cart" />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
 
     </BrowserRouter>
