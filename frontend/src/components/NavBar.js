@@ -66,7 +66,7 @@ function Navbar() {
                         <div className="flex items-center ml-4">
                             <Link to="/cart" className="relative inline-block">
                                 <FaShoppingCart className="text-gray-200" />
-                                <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartItems.length}</span>
+                                <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartItems.length}</span>
                             </Link>
                         </div>
 
