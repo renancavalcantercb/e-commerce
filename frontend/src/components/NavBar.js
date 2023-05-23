@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const navLinks = [
     { id: 1, label: "Home", path: "/" },
-    { id: 2, label: "Ofertas do dia", path: "/sales" },
+    { id: 2, label: "Sale", path: "/sales" },
 ];
 
 const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -18,7 +18,10 @@ function Navbar() {
         <div className="h-full flex flex-col">
             <nav className="flex items-center justify-between flex-wrap bg-gray-800 p-6">
                 <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <span className="font-semibold text-xl tracking-tight">My Store</span>
+                    {/* turn clickable and set a route to home */}
+                    <Link to="/">
+                        <span className="font-semibold text-xl tracking-tight">My Store</span>
+                    </Link>
                 </div>
                 <div className="block lg:hidden">
                     <button
