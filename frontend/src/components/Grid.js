@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateItems } from '../utils/store';
 
 const itemsPerPage = 8;
 const itemsPerPageMobile = 4;
@@ -33,8 +35,8 @@ const handleAddToCart = (item) => {
 
 function Grid() {
     const location = useLocation();
-
-    const [items, setItems] = useState([]);
+    const dispatch = useDispatch();
+    const items = useSelector((state) => state);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -48,14 +50,14 @@ function Grid() {
             try {
                 const response = await fetch(`http://127.0.0.1:5000/products?page=${currentPage}`);
                 const data = await response.json();
-                setItems(data);
+                dispatch(updateItems(data));
             } catch (error) {
                 console.error('Erro ao buscar os produtos:', error);
             }
         };
 
         fetchItems();
-    }, [currentPage]);
+    }, [currentPage, dispatch]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -77,26 +79,24 @@ function Grid() {
         <div className="container mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4">
                 {currentItems.map((item) => (
-                    <div key={item._id.$oid} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
-                        <div className="p-4">
-                            <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                            <p className="text-gray-600 mb-4">{item.description}</p>
-                            <div className="flex justify-between items-center">
-                                {item.on_sale ? (
-                                    <div className="flex items-center">
-                                        <span className="text-lg font-bold mr-2">${item.sale_price.toFixed(2)}</span>
-                                        <span className="text-gray-400 line-through">${item.price.toFixed(2)}</span>
-                                    </div>
-                                ) : (
-                                    <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
-                                )}
-                                <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onClick={() => handleAddToCart(item)}
-                                >
-                                    Add to cart
-                                </button>
+                    <div key={item._id.$oid} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                        <div className="flex-grow p-4 flex flex-col justify-between hover:bg-gray-100 cursor-pointer">
+                            <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
+                            <div>
+                                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                                <p className="text-gray-600 mb-4">{item.description}</p>
+                            </div>
+                            <div className="mt-auto">
+                                <div>
+                                    {item.on_sale ? (
+                                        <div className="flex items-center">
+                                            <span className="text-lg font-bold mr-2">${item.sale_price.toFixed(2)}</span>
+                                            <span className="text-gray-400 line-through">${item.price.toFixed(2)}</span>
+                                        </div>
+                                    ) : (
+                                        <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,6 +115,8 @@ function Grid() {
                 ))}
             </div>
         </div>
+
+
     );
 }
 
