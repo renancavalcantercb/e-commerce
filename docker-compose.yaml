@@ -19,3 +19,11 @@ services:
       - 5000:5000
     volumes:
       - ./backend:/app
+
+    
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
