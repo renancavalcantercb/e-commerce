@@ -14,7 +14,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Define a porta que será exposta
-EXPOSE 5000
+EXPOSE 8080
 
 # Comando para iniciar o servidor Flask
 CMD ["uwsgi", "app.ini"]
