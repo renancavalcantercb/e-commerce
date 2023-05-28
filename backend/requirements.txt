@@ -5,3 +5,4 @@ PyMongo
 pyJWT
 sqlalchemy
 Flask-Cors
+uwsgi
