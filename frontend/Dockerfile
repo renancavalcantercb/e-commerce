@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN yarn install
 COPY . .
+EXPOSE 8080
 RUN yarn run build
 
 # Etapa de criação do contêiner final
