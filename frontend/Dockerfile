@@ -1,11 +1,11 @@
-FROM node:18-alpine
-
+# Etapa de compilação do frontend
+FROM node:18-alpine as build-stage
+WORKDIR /app
 COPY package*.json ./
-
 RUN yarn install
-
 COPY . .
+RUN yarn run build
 
-EXPOSE 3000
-
-CMD ["yarn", "start"]
+# Etapa de criação do contêiner final
+FROM nginx:latest
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
