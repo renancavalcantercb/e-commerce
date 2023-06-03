@@ -3,12 +3,12 @@ from bson import json_util
 from flask import request, jsonify
 
 
-@app.route('/')
+@app.route('/api')
 def index():
     return 'Hello World!'
 
 
-@app.route('/products', methods=['GET', 'POST'])
+@app.route('/api/products', methods=['GET', 'POST'])
 def products(size: int = 10, page: int = 1):
     if request.method == 'GET':
         size = int(request.args.get('size', 10))
