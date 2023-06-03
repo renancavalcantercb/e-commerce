@@ -4,6 +4,11 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from os import environ
 
+import sys
+import os
+
+sys.path.append(os.getcwd())
+
 load_dotenv()
 
 app = Flask(__name__)
