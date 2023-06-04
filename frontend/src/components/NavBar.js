@@ -1,86 +1,154 @@
-import { useState } from "react";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import '../components_style/NavBar.css'
-
-const navLinks = [
-    { id: 1, label: "Home", path: "/" },
-    { id: 2, label: "Sale", path: "/sales" },
-];
+import { Fragment, useState } from 'react'
+import { Dialog, Popover, Transition } from '@headlessui/react'
+import { Bars3Icon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import SearchBar from './SearchBar.js'
+import { Link } from 'react-router-dom'
 
 const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+const navigation = {
+    pages: [
+        { name: 'Home', href: '/' },
+        { name: 'Sales', href: '/sales' },
+    ],
+}
 
-    const toggleMenu = () => setIsOpen(!isOpen);
+export default function NavBar() {
+    const [open, setOpen] = useState(false)
 
     return (
-        <div className="h-full flex flex-col">
-            <nav className="flex items-center justify-between flex-wrap bg-gray-800 p-6">
-                <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <span
-                        className="font-semibold text-xl tracking-tight cursor-pointer"
-                        onClick={() => (window.location.href = "/")}
+        <div className="bg-white">
+            <Transition.Root show={open} as={Fragment}>
+                <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="transition-opacity ease-linear duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="transition-opacity ease-linear duration-300"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                     >
-                        My Store
-                    </span>
-                </div>
-                <div className="flex items-center ml-auto mr-6">
-                    <Link to="/cart" className="relative inline-block">
-                        <FaShoppingCart className="text-gray-200" />
-                        <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                            {cartItems.length}
-                        </span>
-                    </Link>
-                </div>
-                <div className="block lg:hidden">
-                    <button
-                        onClick={toggleMenu}
-                        className="flex items-center py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white mobile-menu-btn"
-                    >
-                        <svg
-                            className="fill-current h-3 w-3"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-40 flex">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="transition ease-in-out duration-300 transform"
+                            enterFrom="-translate-x-full"
+                            enterTo="translate-x-0"
+                            leave="transition ease-in-out duration-300 transform"
+                            leaveFrom="translate-x-0"
+                            leaveTo="-translate-x-full"
                         >
-                            <title>Menu</title>
-                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                        </svg>
-                    </button>
-                </div>
-                <div
-                    className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"
-                        }`}
-                >
-                    <div className="text-sm lg:flex-grow">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.id}
-                                to={link.path}
-                                className="block mt-4 lg:inline-block font-semibold lg:mt-0 text-gray-200 hover:text-white mr-4 mb-4"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
+                                <div className="flex px-4 pb-2 pt-5">
+                                    <button
+                                        type="button"
+                                        className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        <span className="sr-only">Close menu</span>
+                                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                                    {navigation.pages.map((page) => (
+                                        <div key={page.name} className="flow-root">
+                                            <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                                                {page.name}
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                                    <div className="flow-root">
+                                        <button className="-m-2 block p-2 font-medium text-gray-900">
+                                            Sign in
+                                        </button>
+                                    </div>
+                                    <div className="flow-root">
+                                        <button className="-m-2 block p-2 font-medium text-gray-900">
+                                            Create account
+                                        </button>
+                                    </div>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
                     </div>
-                    <div className="flex">
-                        <div className="relative lg:ml-4"> {/* Adicione uma classe e ajuste a margem esquerda (lg:ml-4) */}
-                            <input
-                                type="text"
-                                className="bg-gray-700 text-gray-200 rounded-full py-2 pr-4 pl-10 w-64 focus:outline-none focus:bg-gray-600"
-                                placeholder="Pesquisar"
-                            />
-                            <div className="absolute top-1 left-0 pl-4 py-2">
-                                <FaSearch className="text-gray-400" />
+                </Dialog>
+            </Transition.Root>
+
+            <header className="relative bg-white">
+                <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="border-b border-gray-200">
+                        <div className="flex h-16 items-center">
+                            <button
+                                type="button"
+                                className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                                onClick={() => setOpen(true)}
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                            </button>
+
+                            <div className="ml-4 flex lg:ml-0">
+                                <button onClick={() => window.location.href = "/"}>
+                                    <span className="sr-only">E-commerce</span>
+                                    <img
+                                        className="h-8 w-auto"
+                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                        alt=""
+                                    />
+                                </button>
+                            </div>
+
+                            <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
+                                <div className="flex h-full space-x-8">
+                                    {navigation.pages.map((page) => (
+                                        <a
+                                            key={page.name}
+                                            href={page.href}
+                                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                        >
+                                            {page.name}
+                                        </a>
+                                    ))}
+                                </div>
+                            </Popover.Group>
+
+                            <div className="ml-auto flex items-center">
+                                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                    <button className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                        Sign in
+                                    </button>
+                                    <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
+                                    <button className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                        Create account
+                                    </button>
+                                </div>
+
+                                {SearchBar()}
+
+                                <div className="ml-4 flow-root lg:ml-6">
+                                    <Link to="/cart">
+                                        <button className="group -m-2 flex items-center p-2">
+                                            <ShoppingBagIcon
+                                                className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                            <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartItems.length}</span>
+                                        </button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </header>
         </div>
-
-    );
+    )
 }
-
-export default Navbar;
