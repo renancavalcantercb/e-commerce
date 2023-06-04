@@ -61,8 +61,7 @@ function Grid() {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        window.scrollTo({
-            top: 0,
+        window.scrollTo(0, 0, {
             behavior: 'smooth',
         });
     };
@@ -102,7 +101,7 @@ function Grid() {
                     </div>
                 ))}
             </div>
-            <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center items-center mt-4 mb-4">
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
