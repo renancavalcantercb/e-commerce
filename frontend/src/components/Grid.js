@@ -23,7 +23,7 @@ function Grid() {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://144.22.223.209/api/products?page=${currentPage}`);
+                const response = await fetch(`http://132.226.243.37//api/products?page=${currentPage}`);
                 const data = await response.json();
                 dispatch(updateItems(data));
             } catch (error) {
