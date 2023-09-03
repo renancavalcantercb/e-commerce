@@ -7,6 +7,7 @@ import NavBar from './components/NavBar';
 import Grid from './components/Grid';
 import Cart from './components/Cart';
 import { store } from './utils/store';
+import RegistrationForm from './components/Form';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Grid />} />
           <Route path="/sales" element={<Grid />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/register" element={<RegistrationForm />} />
         </Routes>
       </BrowserRouter>
     </Provider>
