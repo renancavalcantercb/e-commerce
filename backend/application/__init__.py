@@ -21,11 +21,7 @@ client = MongoClient(app.config["MONGO_URI"], connect=False)
 db = client['e-commerce']
 products = db['products']
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    return response
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["POST", "GET", "OPTIONS"]}})
+
 
 from application.routes import *
