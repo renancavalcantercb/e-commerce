@@ -14,8 +14,7 @@ class Product(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False)
     reviews = db.Column(db.Integer, nullable=False)
-    date_added = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
+    date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"Product('{self.title}', '{self.price}', '{self.sale_price}', '{self.on_sale}', '{self.description}', '{self.image}', '{self.category}', '{self.quantity}', '{self.rating}', '{self.reviews}', '{self.date_added}')"
@@ -30,9 +29,7 @@ class User(db.model):
     birth_date = db.Column(db.DateTime, nullable=False)
     phone = db.Column(db.String(11), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
-    date_added = db.Column(db.DateTime, nullable=False,
-                            default=datetime.utcnow)
-    
-    
+    date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
     def __repr__(self):
         return f"User('{self.name}', '{self.email}', '{self.password}', '{self.cpf}', '{self.birth_date}', '{self.phone}', '{self.admin}', '{self.date_added}')"
