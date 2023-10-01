@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +10,7 @@ import Cart from './components/Cart';
 import { store } from './utils/store';
 import RegistrationForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
-import { AuthProvider } from './contexts/AuthContext';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/register" element={<RegistrationForm />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/logout" element={<LoginForm />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
