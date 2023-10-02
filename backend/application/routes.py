@@ -179,3 +179,39 @@ def profile():
         "phone": user["phone"],
         "status": 200,
     }), 200
+
+@app.route("/api/profile/edit", methods=["POST"])
+@token_required
+def update_profile():
+    user_id = request.user_id
+    data = request.get_json()
+
+    name = data.get("name")
+    email = data.get("email")
+    phone = data.get("phone")
+
+    if not name or not email or not phone:
+        return jsonify({"message": "Missing fields", "status": 400}), 400
+
+    try:
+        db.users.update_one(
+            {"_id": user_id},
+            {
+                "$set": {
+                    "name": name,
+                    "email": email,
+                    "phone": phone,
+                }
+            },
+        )
+        return (
+            jsonify({"message": "User successfully updated!", "status": 200}),
+            200,
+        )
+    except Exception as e:
+        return (
+            jsonify({"message": "Error updating user: " + str(e), "status": 500}),
+            500,
+        )
+
+    return jsonify({"message": "Invalid request method", "status": 400}), 400
