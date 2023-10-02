@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { formatCPF } from "../utils/utils";
+import { useAuth } from "../contexts/AuthContext";
 
 const formFields = [
     {
@@ -40,6 +41,13 @@ function Profile() {
         phone: ""
     });
 
+    const [originalFormData, setOriginalFormData] = useState(null);
+    const [isModified, setIsModified] = useState(false);
+    const [profileData, setProfileData] = useState(null);
+    const { logout } = useAuth();
+
+    const token = localStorage.getItem("token");
+
     const handleInputChange = (event) => {
         setFormData({
             ...formData,
@@ -71,8 +79,6 @@ function Profile() {
         ));
     };
 
-    const [profileData, setProfileData] = useState(null);
-    const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -97,6 +103,13 @@ function Profile() {
                     birth_date: data.birth_date || "",
                     phone: data.phone || ""
                 });
+                setOriginalFormData({
+                    name: data.name || "",
+                    email: data.email || "",
+                    CPF: formatCPF(data.cpf) || "",
+                    birth_date: data.birth_date || "",
+                    phone: data.phone || ""
+                });
             } catch (error) {
                 console.error("Fetching profile failed", error);
                 toast.error("Failed to load profile data.");
@@ -106,18 +119,54 @@ function Profile() {
         fetchProfile();
     }, [token]);
 
+    useEffect(() => {
+        if (originalFormData) {
+            const modified = Object.keys(originalFormData).some(
+                key => originalFormData[key] !== formData[key]
+            );
+            setIsModified(modified);
+        }
+    }, [formData, originalFormData]);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/profile/edit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            toast.success('Profile Updated Successfully!');
+            setOriginalFormData(formData);
+            setIsModified(false);
+            logout();
+        } catch (error) {
+            console.error("Updating profile failed", error);
+            toast.error("Failed to update profile data.");
+        }
+    };
+
     return (
         <div>
             {profileData ? (
                 <div>
                     <div className="flex flex-col items-center pt-6 sm:justify-center sm:pt-0">
                         <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-lg">
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 {renderFormFields()}
                                 <div className="flex items-center justify-end mt-4">
                                     <button
                                         type="submit"
-                                        className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900"
+                                        className={`inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out ${isModified ? 'bg-gray-900' : 'bg-gray-300'} border border-transparent rounded-md active:bg-gray-900`}
+                                        disabled={!isModified}
                                     >
                                         Update
                                     </button>
