@@ -39,7 +39,7 @@ Before running this project, make sure you have the following installed:
 	```bash
 	cd  e-commerce
 	cd  frontend
-	yarn  install
+	yarn install
 	```
 
   
