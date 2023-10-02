@@ -11,12 +11,14 @@ import { store } from './utils/store';
 import RegistrationForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
+import ProtectedElement from './components/ProtectedElement';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
     <Provider store={store}>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <ToastContainer
             position="top-right"
             autoClose={2000}
@@ -29,16 +31,18 @@ function App() {
           <Routes>
             <Route path="/" element={<Grid />} />
             <Route path="/sales" element={<Grid />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<ProtectedElement><Cart /></ProtectedElement>} />
             <Route path="/register" element={<RegistrationForm />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/logout" element={<LoginForm />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProtectedElement><Profile /></ProtectedElement>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </Provider>
   );
 }
+
 
 export default App;
