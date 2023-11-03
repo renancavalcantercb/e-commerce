@@ -5,7 +5,12 @@ from bson import json_util
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from application.decorators.token_decorator import token_required
-from application.utils.utils import clean_cpf
+from application.utils.utils import (
+    clean_cpf,
+    generate_confirmation_token,
+    send_confirmation_email,
+)
+
 
 @app.route("/api")
 def index():
@@ -97,6 +102,8 @@ def register():
                 400,
             )
 
+        token = generate_confirmation_token()
+
         try:
             db.users.insert_one(
                 {
@@ -107,8 +114,13 @@ def register():
                     "birth_date": birth_date,
                     "phone": phone,
                     "admin": admin,
+                    "confirmed": False,
+                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24),
+                    "token": token,
+                    "created_at": datetime.datetime.utcnow(),
                 }
             )
+            send_confirmation_email(email, token)
             return (
                 jsonify({"message": "User successfully created!", "status": 201}),
                 201,
@@ -120,6 +132,23 @@ def register():
             )
 
     return jsonify({"error": "Invalid request method", "status": 400}), 400
+
+
+@app.route("/api/confirm/<token>", methods=["GET"])
+def confirm_email(token):
+    try:
+        user = db.users.find_one({"token": token})
+        if user:
+            if datetime.datetime.utcnow() > user["exp"]:
+                return jsonify({"message": "Token expired", "status": 400}), 400
+            else:
+                db.users.update_one({"_id": user["_id"]}, {"$set": {"confirmed": True}})
+                return (
+                    jsonify({"message": "User successfully confirmed!", "status": 200}),
+                    200,
+                )
+    except Exception as e:
+        return jsonify({"message": "Error finding user: " + str(e), "status": 500}), 500
 
 
 @app.route("/api/login", methods=["POST"])
@@ -165,20 +194,26 @@ def login():
 @token_required
 def profile():
     user_id = request.user_id
-    
+
     user = db.users.find_one({"_id": user_id})
     if not user:
         return jsonify({"message": "User not found", "status": 404}), 404
-        
-    return jsonify({
-        "message": "User found",
-        "name": user["name"],
-        "email": user["email"],
-        "cpf": user["cpf"],
-        "birth_date": user["birth_date"],
-        "phone": user["phone"],
-        "status": 200,
-    }), 200
+
+    return (
+        jsonify(
+            {
+                "message": "User found",
+                "name": user["name"],
+                "email": user["email"],
+                "cpf": user["cpf"],
+                "birth_date": user["birth_date"],
+                "phone": user["phone"],
+                "status": 200,
+            }
+        ),
+        200,
+    )
+
 
 @app.route("/api/profile/edit", methods=["POST"])
 @token_required
