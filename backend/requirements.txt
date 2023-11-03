@@ -6,3 +6,4 @@ pyJWT
 sqlalchemy
 Flask-Cors
 gunicorn
+Flask-Mail
