@@ -11,7 +11,7 @@ def token_required(f):
         auth_header = request.headers.get("Authorization")
         if not auth_header or "Bearer " not in auth_header:
             return jsonify({"message": "Missing token", "status": 400}), 400
-        
+
         token = auth_header.split(" ")[1]
 
         try:
@@ -22,6 +22,7 @@ def token_required(f):
         except Exception as e:
             print(e)
             return jsonify({"message": "Invalid token", "status": 400}), 400
-        
+
         return f(*args, **kwargs)
+
     return decorated
