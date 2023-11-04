@@ -68,7 +68,8 @@ export default function NavBar() {
                                         <Link
                                             key={page.name}
                                             to={page.href}
-                                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                            className="flex items-center text-sm text-gray-700 hover:text-gray-800"
+                                            style={{ fontSize: '1rem' }}
                                         >
                                             {page.name}
                                         </Link>
@@ -81,7 +82,7 @@ export default function NavBar() {
                                     {isLoggedIn ? (
                                         <Menu as="div" className="relative inline-block text-left">
                                             <div>
-                                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md text-sm font-medium text-gray-700 hover:text-gray-800">
+                                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md text-sm text-gray-700 hover:text-gray-800" style={{ fontSize: '1rem' }}>
                                                     Hello, {user_name}
                                                     <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                                                 </Menu.Button>
@@ -140,7 +141,8 @@ export default function NavBar() {
                                             <Link
                                                 key={authItem.name}
                                                 to={authItem.href}
-                                                className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                                className="text-sm text-gray-700 hover:text-gray-800"
+                                                style={{ fontSize: '1rem' }}
                                             >
                                                 {authItem.name}
                                             </Link>
@@ -157,7 +159,7 @@ export default function NavBar() {
                                                 className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                                 aria-hidden="true"
                                             />
-                                            <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartItems.length}</span>
+                                            <span className="ml-2 text-sm text-gray-700 group-hover:text-gray-800" style={{ fontSize: '1rem' }}>{cartItems.length}</span>
                                         </button>
                                     </Link>
                                 </div>
