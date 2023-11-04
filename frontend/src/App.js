@@ -13,6 +13,7 @@ import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
 import ProtectedElement from './components/ProtectedElement';
 import NotFound from './components/NotFound';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
             <Route path="/profile" element={<ProtectedElement><Profile /></ProtectedElement>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+
+          <Footer />
         </AuthProvider>
       </BrowserRouter>
     </Provider>
