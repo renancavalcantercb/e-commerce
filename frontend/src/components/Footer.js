@@ -12,10 +12,10 @@ export default function Footer() {
                     <div class="flex flex-col">
                         <h1 class="text-lg font-semibold mb-4">Payment methods</h1>
                         <div class="flex flex-row justify-center gap-6">
-                            <img src={american} alt="american" class="w-1/4" />
-                            <img src={mastercard} alt="mastercard" class="w-1/4" />
-                            <img src={visa} alt="visa" class="w-1/4" />
-                            <img src={pix} alt="pix" class="w-1/4" />
+                            <img src={american} alt="american" style={{ height: '36px' }} />
+                            <img src={mastercard} alt="mastercard" style={{ height: '36px' }} />
+                            <img src={visa} alt="visa" style={{ height: '36px' }} />
+                            <img src={pix} alt="pix" style={{ height: '36px' }} />
                         </div>
                     </div>
                     <div class="w-1/2">
@@ -24,12 +24,12 @@ export default function Footer() {
             </div>
 
             <div class="flex justify-between py-4 mt-4" style={{ backgroundColor: '#e6e6e6' }}>
-                <div className="container mx-auto flex flex-col md:flex-row">
+                <div className="container mx-auto flex flex-col md:flex-row justify-items-center gap-64">
                     <div class="flex flex-col">
                         <p className="font-semibold">Customer Service</p>
                         <ul>
                             <li>
-                                <a href="#" class="mr-4 hover:underline md:mr-6 ">Contact us</a>
+                                <a href="#" class="mr-4 hover:underline md:mr-6">Contact us</a>
                             </li>
                             <li>
                                 <a href="#" class="mr-4 hover:underline md:mr-6">FAQ's</a>
@@ -69,18 +69,19 @@ export default function Footer() {
 
             <div class="rounded" style={{ backgroundColor: '#e6e6e6' }}>
                 <div className="mx-auto container">
-                    <ul class="flex flex-wrap items-center mt-3 text-sm font-medium md:mt-0">
-                        <li>
-                            <a href="#" class="mr-4 hover:underline md:mr-6 ">About</a>
-                        </li>
+                    <ul class="flex flex-wrap items-center mt-3 mb-4 text-sm font-medium md:mt-0">
                         <li>
                             <a href="#" class="mr-4 hover:underline md:mr-6">Privacy Policy</a>
                         </li>
                         <li>
-                            <a href="#" class="mr-4 hover:underline md:mr-6">Licensing</a>
+                            <a href="#" class="mr-4 hover:underline md:mr-6 ">Accessibility</a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="mr-4 hover:underline md:mr-6">Sitemap</a>
                         </li>
                         <li>
-                            <a href="#" class="hover:underline">Contact</a>
+                            <a href="#" class="hover:underline">Protection of Intellectual Property</a>
                         </li>
                     </ul>
                     <span class="text-sm">
