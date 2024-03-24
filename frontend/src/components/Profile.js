@@ -167,7 +167,7 @@ function Profile() {
                                 <div className="flex items-center justify-end mt-4">
                                     <button
                                         type="submit"
-                                        className={`inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out ${isModified ? 'bg-gray-900' : 'bg-gray-300'} border border-transparent rounded-md active:bg-gray-900`}
+                                        className={`inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out ${isModified ? 'bg-[#5046e6]' : 'bg-gray-300'} border border-transparent rounded-md active:bg-[#5046e6]`}
                                         disabled={!isModified}
                                     >
                                         Update
