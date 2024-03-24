@@ -93,7 +93,7 @@ function Grid() {
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
-                        className={`px-3 py-1 rounded-full ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                        className={`px-3 py-1 rounded-full ${currentPage === i + 1 ? 'bg-[#5046e6] text-white' : 'bg-gray-200 text-gray-700'}
                             }`}
                         onClick={() => handlePageChange(i + 1)}
                     >
