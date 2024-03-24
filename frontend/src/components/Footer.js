@@ -54,7 +54,7 @@ const Footer = () => {
             <li><a href="#" className="hover:underline">Protection of Intellectual Property</a></li>
           </ul>
           <p className="text-center text-sm mt-4">
-            © 2023 <a href="https://yourwebsite.com" className="hover:underline">E-commerce</a>. All Rights Reserved.
+            © 2024 <a href="https://yourwebsite.com" className="hover:underline">E-commerce</a>. All Rights Reserved.
           </p>
         </div>
       </div>
