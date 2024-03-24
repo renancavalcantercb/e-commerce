@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateItems } from '../utils/store';
 import ItemModal from './ItemModal';
 
+import API_CONFIG from '../config/index.js';
+
 const itemsPerPage = 8;
 const itemsPerPageMobile = 4;
 
@@ -23,7 +25,7 @@ function Grid() {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:5000/api/products?page=${currentPage}`);
+                const response = await fetch(`${API_CONFIG.BASE_URL}/products?page=${currentPage}`);
                 const data = await response.json();
                 dispatch(updateItems(data));
             } catch (error) {

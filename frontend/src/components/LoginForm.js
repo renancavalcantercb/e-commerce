@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+
+import API_CONFIG from '../config/index.js';
+
 const formFields = [
     {
         label: "Email",
@@ -20,6 +23,7 @@ const formFields = [
 
 
 export default function Login() {
+    console.log(API_CONFIG.BASE_URL)
     const navigate = useNavigate();
     const { login } = useAuth();
     const [formData, setFormData] = useState({
@@ -45,7 +49,7 @@ export default function Login() {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/login", {
+            const response = await fetch(`${API_CONFIG.BASE_URL}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatCPF, isValid } from "../utils/utils";
 
+import API_CONFIG from '../config/index.js';
+
 const formFields = [
     {
         label: "Email",
@@ -95,7 +97,7 @@ export default function Registration() {
             return;
         }
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/register", {
+            const response = await fetch(`${API_CONFIG.BASE_URL}/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
