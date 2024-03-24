@@ -1,7 +1,7 @@
 import { Popover } from '@headlessui/react'
 import { Bars3Icon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 import SearchBar from './SearchBar.js'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.js'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
@@ -28,6 +28,7 @@ function classNames(...classes) {
 export default function NavBar() {
     const { isLoggedIn, logout } = useAuth();
     let user_name = "";
+    const location = useLocation();
 
     if (isLoggedIn) {
         const token = localStorage.getItem('token');
@@ -68,7 +69,10 @@ export default function NavBar() {
                                         <Link
                                             key={page.name}
                                             to={page.href}
-                                            className="flex items-center text-sm text-gray-700 hover:text-gray-800"
+                                            className={classNames(
+                                                "flex items-center text-sm hover:text-gray-800",
+                                                location.pathname === page.href ? "text-[#5046e6]" : "text-gray-700"
+                                            )}
                                             style={{ fontSize: '1rem' }}
                                         >
                                             {page.name}
@@ -141,7 +145,10 @@ export default function NavBar() {
                                             <Link
                                                 key={authItem.name}
                                                 to={authItem.href}
-                                                className="text-sm text-gray-700 hover:text-gray-800"
+                                                className={classNames(
+                                                    "text-sm hover:text-gray-800",
+                                                    location.pathname === authItem.href ? "text-[#5046e6]" : "text-gray-700"
+                                                )}
                                                 style={{ fontSize: '1rem' }}
                                             >
                                                 {authItem.name}
