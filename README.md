@@ -1,7 +1,7 @@
 
 # E-commerce Fullstack Project
 
-This is a fullstack e-commerce project that includes a React front-end, a Flask back-end, and a MongoDB Atlas database. The project is containerized using Docker Compose for easy deployment and management of both services.
+This is a fullstack e-commerce project that includes a React front-end, a Flask back-end, and a MongoDB Atlas database. The project is containerized using Docker Compose for easy deployment and management of both services. Continuous Integration and Continuous Deployment (CI/CD) are handled through GitHub Actions, and Nginx is used as a web server to efficiently manage web traffic and serve static files.
 
 ## Technologies Used
 
@@ -9,6 +9,8 @@ This is a fullstack e-commerce project that includes a React front-end, a Flask 
 - Back-end: Flask
 - Database: MongoDB Atlas
 - Deployment: Docker Compose
+- CI/CD: GitHub Actions
+- Web Server: Nginx
   
 ## Prerequisites
   
@@ -19,7 +21,7 @@ Before running this project, make sure you have the following installed:
 - [Python](https://www.python.org) - Programming language used by Flask
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Managed MongoDB database service
 - [Docker](https://www.docker.com) - Containerization platform for deployment
-
+- [Nginx](https://nginx.org/en/) - Web server and reverse proxy
   
 
 ## Installation
@@ -88,6 +90,17 @@ Before running this project, make sure you have the following installed:
 
 Feel free to explore and interact with the e-commerce application through the front-end interface.
 
+## Continuous Integration and Deployment with GitHub Actions
+
+This project uses GitHub Actions for CI/CD, automating the build, test, and deployment process upon every commit to the main branch. This ensures that the latest changes are seamlessly integrated and deployed to the production environment without manual intervention.
+
+## Serving the Application with Nginx
+
+Nginx acts as the reverse proxy for the Flask application and serves the React application's static files, ensuring efficient handling of web traffic and enhancing security and performance.
+
+For deployment in production environments, it is recommended to configure Nginx to manage HTTPS traffic and to serve the React build directory directly, while proxying API requests to the Flask back-end.
+
+
 ## Acknowledgments
 
 - [React](https://reactjs.org)
@@ -96,3 +109,5 @@ Feel free to explore and interact with the e-commerce application through the fr
 - [Flask](https://flask.palletsprojects.com)
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 - [Docker Compose](https://docs.docker.com/compose)
+- [GitHub Actions](https://github.com/features/actions)
+- [Nginx](https://nginx.org/en/)
