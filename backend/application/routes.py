@@ -1,7 +1,7 @@
 import datetime
 import jwt
 from application import app, db
-from bson import json_util
+from bson import json_util, ObjectId
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from application.decorators.token_decorator import token_required
@@ -70,6 +70,37 @@ def products(size: int = 10, page: int = 1):
             )
 
     return jsonify({"message": "Invalid request method", "status": 400}), 400
+
+
+@app.route("/api/products/<product_id>", methods=["GET"])
+def get_product_by_id(product_id):
+    if request.method == "GET":
+        try:
+            product = db.products.find_one({"_id": ObjectId(product_id)})
+
+            if product:
+                product_data = {
+                    "message": "Product found",
+                    "product_name": product["title"],
+                    "product_price": product["price"],
+                    "product_sale_price": product["sale_price"],
+                    "product_on_sale": product["on_sale"],
+                    "product_description": product["description"],
+                    "product_image": product["image"],
+                    "product_category": product["category"],
+                    "product_quantity": product["quantity"],
+                    "product_rating": product["rating"],
+                    "product_review": product["reviews"],
+                }
+                return (
+                    jsonify(product_data),
+                    200,
+                )
+
+            return jsonify({"message": "Product not found", "status": 404})
+
+        except Exception as e:
+            return jsonify({"message": f"An error occurred: {e}", "status": 400})
 
 
 @app.route("/api/register", methods=["POST"])
