@@ -25,7 +25,6 @@ app.config["MAIL_USE_SSL"] = False
 
 client = MongoClient(app.config["MONGO_URI"], connect=False)
 db = client["e-commerce"]
-products = db["products"]
 
 CORS(app, resources={r"/*": {"origins": "*", "methods": ["POST", "GET", "OPTIONS"]}})
 
