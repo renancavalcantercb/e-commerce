@@ -104,7 +104,9 @@ export default function Registration() {
                 },
                 body: JSON.stringify(formData),
             });
-            const { message, status } = await response.json();
+            const responseData = await response.json();
+            const { message, status, errors } = responseData;
+            
             if (status === 201) {
                 toast.success(message);
                 setFormData({
@@ -117,8 +119,13 @@ export default function Registration() {
                     phone: "",
                 });
             }
-            if (status === 400 || status === 500) {
-                toast.warning(message);
+            if (status === 400 || status === 409 || status === 500) {
+                // Display validation errors if available
+                if (errors && Array.isArray(errors)) {
+                    errors.forEach(error => toast.warning(error));
+                } else {
+                    toast.warning(message);
+                }
             }
         } catch (error) {
             console.log(error);

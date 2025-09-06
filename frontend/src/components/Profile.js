@@ -98,19 +98,23 @@ function Profile() {
 
                 const data = await response.json();
                 setProfileData(data);
+                
+                // Backend now returns user object nested in response
+                const user = data.user || data;
+                
                 setFormData({
-                    name: data.name || "",
-                    email: data.email || "",
-                    CPF: formatCPF(data.cpf) || "",
-                    birth_date: data.birth_date || "",
-                    phone: data.phone || ""
+                    name: user.name || "",
+                    email: user.email || "",
+                    CPF: formatCPF(user.cpf) || "",
+                    birth_date: user.birth_date || "",
+                    phone: user.phone || ""
                 });
                 setOriginalFormData({
-                    name: data.name || "",
-                    email: data.email || "",
-                    CPF: formatCPF(data.cpf) || "",
-                    birth_date: data.birth_date || "",
-                    phone: data.phone || ""
+                    name: user.name || "",
+                    email: user.email || "",
+                    CPF: formatCPF(user.cpf) || "",
+                    birth_date: user.birth_date || "",
+                    phone: user.phone || ""
                 });
             } catch (error) {
                 console.error("Fetching profile failed", error);
@@ -133,13 +137,20 @@ function Profile() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            // Backend changed to PUT method and expects different field names
+            const requestData = {
+                name: formData.name,
+                email: formData.email, 
+                phone: formData.phone
+            };
+            
             const response = await fetch(`${API_CONFIG.BASE_URL}/profile/edit`, {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(requestData),
             });
 
             if (!response.ok) {

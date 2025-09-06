@@ -62,7 +62,7 @@ export default function Login() {
                 navigate("/")
                 toast.success(message);
             }
-            if (status === 400 || status === 500) {
+            if (status === 401 || status === 400 || status === 500) {
                 toast.warning(message);
             }
         } catch (error) {
